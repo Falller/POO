@@ -36,8 +36,8 @@ let curso = {
         } else if (this._p1 < 0) {
             return "A nota da p1 foi negativa, não vai ser possível fazer uma média!"
         } else {
-            let media = (this._p1 + this._p2) / 2;
-            return "No curso " + this._nome + " sua média é " + media + "!"
+            this._media = (this._p1 + this._p2) / 2;
+            return "No curso " + this._nome + " sua média é " + _media + "!"
         }
     },
 }
