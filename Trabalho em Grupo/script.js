@@ -9,6 +9,37 @@
  * Pense em Pense em outras coisas que façam sentido 
  * para um app de banco e que faça consiga implementar
  */
+
+
+//PARTE 2
+/**
+ * No cliente pessoa física, criar um método
+onde retorna os dados de rg e cpf.
+No cliente pessoa juridica, criar um método
+onde retorna os dados do cnpj
+
+Utilize o conceito de Polimorfismo para execução da solicitação acima
+
+
+Crie uma Classe Lançamentos 
+e para cada operação de saque ou depósito
+Insira os seguintes registros nessa classe:
+  - Nome do Cliente
+  - Tipo da Operação (se foi saque ou se foi depósito)
+  - Valor
+  - Horario da Transação
+Considerando o conceito de encapsulamento
+deixe o saldo bancário do cliente inacessível fora do escopo de conta.
+Lembre-se apenas o escopo de conta poderá movimentar o saldo bancário.
+
+Crie um método que calcule o juros de atraso 
+de um determinado pgto, onde tenha as seguintes regras: 
+- Atraso de 1 dia juros de 1%
+- Atraso de 2 dias juros 2.5 % 
+- Atraso de 3 dias ou mais, juros composto 
+ */
+
+const lancamentos = [];
 class Conta {
     #saldo
     constructor() {
@@ -24,6 +55,9 @@ class Conta {
     depositar (valor) {
         this.#saldo += valor;
         console.log(`${this.nome} Você depositou ${valor} e seu saldo atual é ${this.#saldo}`);
+
+        lancamentos.push
+
     }
 
     sacar (valor) {
@@ -73,8 +107,13 @@ class pF extends Cliente {
         this.#rg = rg
     }
 
-    infospF () {
-        return `Nome: ${this.nome} \nTelefone: ${this.telefone}`
+    dados () {
+        return `
+        Nome: ${this.nome} 
+        CPF: ${this.#cpf}
+        RG: ${this.#rg}
+        Conta: ${this.conta}
+        Agência: ${this.agencia}`
     }
 
 
@@ -87,9 +126,16 @@ class pJ extends Cliente {
         this.#cnpj = cnpj
     }
 
+    dados () {
+        return `Nome: ${this.nome}
+        \nCPNJ: ${this.#cnpj}
+        \nConta: ${this.conta}
+        \nAgência: ${this.agencia}`
+    }
+
 }
 
-const conta1 = new pF("Marlon", "11 951363201", "Avenida Perimetral, 598", "São Luiz Gonzaga", "Passo Fundo", "00000000000", "12345678910");
+const conta1 = new pF("Marlon", "11 951363201", "Avenida Perimetral, 598", "São Luiz Gonzaga", "Passo Fundo", "000.000.000-00", "12345678910");
 console.log(conta1);
 
 conta1.depositar(100);
@@ -113,7 +159,7 @@ console.log("Depois do Transferir");
 console.log(conta1.saldo);
 console.log(conta2.saldo)
 
-console.log(conta1.infospF())
+console.log(conta1.dados())
 
 
 
