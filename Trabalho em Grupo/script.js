@@ -42,7 +42,7 @@ class Conta {
         } else {
             console.log(`Saldo insuficiente, transferencia não efetuada!`)
         }
-    }
+    }    
 }
 
 class Cliente extends Conta{
@@ -58,6 +58,10 @@ class Cliente extends Conta{
         this.#bairro = enderecoBairro,
         this.#cidade = enderecoCidade
     }
+
+    get telefone () {
+        return this.#telefone
+    }
 }
 
 class pF extends Cliente {
@@ -68,6 +72,12 @@ class pF extends Cliente {
         this.#cpf = cpf,
         this.#rg = rg
     }
+
+    infospF () {
+        return `Nome: ${this.nome} \nTelefone: ${this.telefone}`
+    }
+
+
 }
 
 class pJ extends Cliente {
@@ -76,6 +86,7 @@ class pJ extends Cliente {
         super(nome, telefone, enderecoRua, enderecoBairro, enderecoCidade),
         this.#cnpj = cnpj
     }
+
 }
 
 const conta1 = new pF("Marlon", "11 951363201", "Avenida Perimetral, 598", "São Luiz Gonzaga", "Passo Fundo", "00000000000", "12345678910");
@@ -101,6 +112,8 @@ conta1.transferir(1500, conta2);
 console.log("Depois do Transferir");
 console.log(conta1.saldo);
 console.log(conta2.saldo)
+
+console.log(conta1.infospF())
 
 
 
