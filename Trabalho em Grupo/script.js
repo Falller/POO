@@ -21,7 +21,7 @@ onde retorna os dados do cnpj
 Utilize o conceito de Polimorfismo para execução da solicitação acima
 
 
-Crie uma Classe Lançamentos 
+Crie uma Objeto Lançamentos 
 e para cada operação de saque ou depósito
 Insira os seguintes registros nessa classe:
   - Nome do Cliente
@@ -36,10 +36,12 @@ Crie um método que calcule o juros de atraso
 de um determinado pgto, onde tenha as seguintes regras: 
 - Atraso de 1 dia juros de 1%
 - Atraso de 2 dias juros 2.5 % 
-- Atraso de 3 dias ou mais, juros composto 
+- Atraso de 3 dias ou mais, juros composto 2.5%
  */
 
 const lancamentos = [];
+
+
 class Conta {
     #saldo
     constructor() {
@@ -52,31 +54,94 @@ class Conta {
         return this.#saldo;
     }
 
+    geraDados (nomeop, tipoop,valorop) {
+        const tra1 = {
+            nome: nomeop,
+            tipo: tipoop,
+            valor: valorop,
+            horario: new Date
+        }
+        return tra1;
+    }
+     
+
     depositar (valor) {
         this.#saldo += valor;
         console.log(`${this.nome} Você depositou ${valor} e seu saldo atual é ${this.#saldo}`);
 
-        lancamentos.push
+        let transacao = this.geraDados(this.nome, "Depósito", valor)
+
+        lancamentos.push(transacao);
 
     }
 
     sacar (valor) {
         if(valor <= this.#saldo) {
             this.#saldo -= valor;
-            console.log(`${this.nome} Você sacou ${valor} e seu saldo atual é ${this.#saldo}!`)
+            console.log(`${this.nome} Você sacou ${valor} e seu saldo atual é ${this.#saldo}!`);
+
+            let transacao = this.geraDados(this.nome, "Saque", valor)
+
+            lancamentos.push(transacao);
+
+
         } else {
             console.log(`Saldo insuficiente, saque não efetuado!`)
         }
+
     }
 
     transferir (valor, Conta) {
         if(this.#saldo >= valor){
             this.sacar(valor);
             Conta.depositar(valor);
+
+            let transacao = this.geraDados(this.nome, "Transferência", valor)
+
+            lancamentos.push(transacao);
+
         } else {
             console.log(`Saldo insuficiente, transferencia não efetuada!`)
         }
-    }    
+
+    }
+    
+    pagar (valor, dataVencimento) {
+
+        console.log("Cheguei no pagar")
+
+        const taxa1dia = 0.01;
+        const taxa2dia = 0.025;
+        const taxa3dia = 0.025;
+        const nDias = 0 - dataVencimento;
+//        const nDias = new Date - dataVencimento;
+        if(this.#saldo >= valor){
+            if(nDias == 1){
+                valor += valor * taxa2dia;
+                this.#saldo -= valor;
+                console.log(`Vc pagou ${valor} com juros de 1 dia`)
+            } else if (nDias == 2) {
+                valor += valor * taxa2dia;
+                this.#saldo -= valor;
+                console.log(`Vc pagou ${valor} com juros de 2 dias`)
+            } else if (nDias >= 3) {
+
+                for (let cont = 1; cont <= nDias; cont++) {
+                    valor += valor *taxa3dia;
+                    console.log(`Valor: ${valor}`)
+                }
+                console.log(`Vc pagou ${valor} com juros compostos de 3 dias ou mais`)
+                //valor += valor * taxa1dia;
+                //valor += valor * taxa2dia;
+                //valor += valor * taxa1dia;
+                this.#saldo -= valor;
+            } else {
+                this.#saldo -= valor;
+                console.log(`Vc pagou ${valor} SEM juros!`)
+            }
+
+        }
+    }
 }
 
 class Cliente extends Conta{
@@ -127,10 +192,11 @@ class pJ extends Cliente {
     }
 
     dados () {
-        return `Nome: ${this.nome}
-        \nCPNJ: ${this.#cnpj}
-        \nConta: ${this.conta}
-        \nAgência: ${this.agencia}`
+        return `
+        Nome: ${this.nome}
+        CPNJ: ${this.#cnpj}
+        Conta: ${this.conta}
+        Agência: ${this.agencia}`
     }
 
 }
@@ -157,9 +223,30 @@ console.log(conta2.saldo)
 conta1.transferir(1500, conta2);
 console.log("Depois do Transferir");
 console.log(conta1.saldo);
-console.log(conta2.saldo)
+console.log(conta2.saldo);
 
-console.log(conta1.dados())
+console.log(conta1.dados());
+
+console.log(lancamentos);
+
+conta1.pagar(200, -3);
+console.log(conta1.saldo);
+
+conta1.pagar(200, -2);
+console.log(conta1.saldo);
+
+conta1.pagar(200, -1);
+console.log(conta1.saldo);
+
+conta1.pagar(200, 0);
+console.log(conta1.saldo);
+
+conta1.pagar(200, -10);
+console.log(conta1.saldo);
+
+conta1.pagar(200, 5);
+console.log(conta1.saldo);
+
 
 
 
