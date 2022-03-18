@@ -204,7 +204,7 @@ class pJ extends Cliente {
 const conta1 = new pF("Marlon", "11 951363201", "Avenida Perimetral, 598", "São Luiz Gonzaga", "Passo Fundo", "000.000.000-00", "12345678910");
 console.log(conta1);
 
-conta1.depositar(100);
+conta1.depositar(10000);
 console.log(conta1.saldo);
 
 conta1.sacar(200);
