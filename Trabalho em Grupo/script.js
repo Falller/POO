@@ -38,6 +38,31 @@ de um determinado pgto, onde tenha as seguintes regras:
 - Atraso de 2 dias juros 2.5 % 
 - Atraso de 3 dias ou mais, juros composto 2.5%
  */
+// EXERCÍCIO PARTE 3
+/**
+ * - Crie um método de Leasing para o cliente
+considerando as seguintes condições:
+- Se cliente PJ, considerar Juros diário de 1%
+- Se cliente PF, considerar juros diário de 0.5 %
+
+- Sempre que o usuário for fazer um saque, pagar uma conta, ou realizar 
+transferência e o saldo disponível em conta for menor que o valor da operação,  
+verificar se o mesmo quer fazer uso do Leasing, se sim, liberar o saque e informar o 
+valor negativo e a taxa de juros a ser aplicada.
+- Implementar um método que calcule e armazene o saldo do juros do leasing da conta, 
+sendo separado por data, para ser possível ver o quanto de juros de leasing o cliente 
+esta acumulando diariamente.
+[Saldo negativo:
+Juros Diário:
+Data:
+Juros Total Acumulado:]
+
+OBS: Sempre que o cliente entrar no cheque especial o metodo precisa ser invocado
+
+- Crie um método que irá verificar se o cliente está com cheque especial, 
+e se ocorrer um depósito em conta, é necessário abater o valor do cheque especial
+
+ */
 
 const lancamentos = [];
 
@@ -51,7 +76,7 @@ class Conta {
     }
 
     get saldo () {
-        return this.#saldo;
+        return this.#saldo.toFixed(2);
     }
 
     geraDados (nomeop, tipoop,valorop) {
@@ -86,7 +111,19 @@ class Conta {
 
 
         } else {
-            console.log(`Saldo insuficiente, saque não efetuado!`)
+            this.leasing();
+            if(this.leasing()) {
+                this.#saldo -= valor;
+                console.log(`${this.nome} Você sacou ${valor} e seu saldo atual é ${this.#saldo}!`);
+    
+                let transacao = this.geraDados(this.nome, "Saque", valor)
+    
+                lancamentos.push(transacao);    
+            } else {
+                console.log(`Saldo insuficiente e vc não quis usar seu CHEQUE ESPECIAL, saque não efetuado!`)
+            }
+
+//            console.log(`Saldo insuficiente, saque não efetuado!`)
         }
 
     }
@@ -101,7 +138,18 @@ class Conta {
             lancamentos.push(transacao);
 
         } else {
-            console.log(`Saldo insuficiente, transferencia não efetuada!`)
+            this.leasing();
+            if(this.leasing()) {
+                this.sacar(valor);
+            Conta.depositar(valor);
+
+            let transacao = this.geraDados(this.nome, "Transferência", valor)
+
+            lancamentos.push(transacao);    
+            } else {
+                console.log(`Saldo insuficiente e vc não quis usar seu CHEQUE ESPECIAL, Transferência não efetuado!`)
+            }
+//            console.log(`Saldo insuficiente, transferencia não efetuada!`)
         }
 
     }
@@ -117,7 +165,7 @@ class Conta {
 //        const nDias = new Date - dataVencimento;
         if(this.#saldo >= valor){
             if(nDias == 1){
-                valor += valor * taxa2dia;
+                valor += valor * taxa1dia;
                 this.#saldo -= valor;
                 console.log(`Vc pagou ${valor} com juros de 1 dia`)
             } else if (nDias == 2) {
@@ -140,6 +188,22 @@ class Conta {
                 console.log(`Vc pagou ${valor} SEM juros!`)
             }
 
+        } else {
+
+        }
+    }
+
+    leasing() {
+        const leasing = prompt("Seu saldo não é suficiente para efetuar essa transação. Você quer um cheque especial? [S/N]");
+        if(leasing === "S" || leasing === "s") {
+            console.log("Cliente respondeu SIM");
+            return true;
+        } else if (leasing === "N" || leasing === "n") {
+            console.log("Cliente respondeu NÃO");
+            return false;
+        } else {
+            console.log("Cliente respondeu ERRADO");
+            this.leasing();
         }
     }
 }
@@ -246,6 +310,10 @@ console.log(conta1.saldo);
 
 conta1.pagar(200, 5);
 console.log(conta1.saldo);
+
+conta1.leasing();
+
+
 
 
 
