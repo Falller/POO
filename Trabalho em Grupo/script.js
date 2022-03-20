@@ -76,7 +76,7 @@ class Conta {
     }
 
     get saldo () {
-        return this.#saldo.toFixed(2);
+        return `Seu saldo é ${this.#saldo.toFixed(2)}`;
     }
 
     geraDados (nomeop, tipoop,valorop) {
@@ -112,14 +112,14 @@ class Conta {
 
         } else {
             this.leasing();
-            if(this.leasing()) {
+            if(this.leasing = true) {
                 this.#saldo -= valor;
                 console.log(`${this.nome} Você sacou ${valor} e seu saldo atual é ${this.#saldo}!`);
     
                 let transacao = this.geraDados(this.nome, "Saque", valor)
     
                 lancamentos.push(transacao);    
-            } else {
+            } else if(this.leasing = false){
                 console.log(`Saldo insuficiente e vc não quis usar seu CHEQUE ESPECIAL, saque não efetuado!`)
             }
 
@@ -139,7 +139,7 @@ class Conta {
 
         } else {
             this.leasing();
-            if(this.leasing()) {
+            if(this.leasing == true) {
                 this.sacar(valor);
             Conta.depositar(valor);
 
@@ -189,14 +189,53 @@ class Conta {
             }
 
         } else {
+            this.leasing();
+            if(this.leasing == true) {
+                if(nDias == 1){
+                    valor += valor * taxa1dia;
+                    this.#saldo -= valor;
+                    console.log(`Vc pagou ${valor} com juros de 1 dia`)
+                    
+                    let transacao = this.geraDados(this.nome, "Transferência", valor)
 
-        }
+                    lancamentos.push(transacao);
+
+                } else if (nDias == 2) {
+                    valor += valor * taxa2dia;
+                    this.#saldo -= valor;
+                    console.log(`Vc pagou ${valor} com juros de 2 dias`)
+
+                    let transacao = this.geraDados(this.nome, "Transferência", valor)
+
+                    lancamentos.push(transacao);
+
+                } else if (nDias >= 3) {
+    
+                    for (let cont = 1; cont <= nDias; cont++) {
+                        valor += valor *taxa3dia;
+                        console.log(`Valor: ${valor}`)
+                    }
+                    console.log(`Vc pagou ${valor} com juros compostos de 3 dias ou mais`)
+                    //valor += valor * taxa1dia;
+                    //valor += valor * taxa2dia;
+                    //valor += valor * taxa1dia;
+                    this.#saldo -= valor;   
+                    
+                    let transacao = this.geraDados(this.nome, "Transferência", valor)
+
+                    lancamentos.push(transacao);
+                } else {
+                console.log(`Saldo insuficiente e vc não quis usar seu CHEQUE ESPECIAL, Pagamento de conta não efetuada não efetuado!`)
+                }
+            }
+        }   
     }
 
     leasing() {
-        const leasing = prompt("Seu saldo não é suficiente para efetuar essa transação. Você quer um cheque especial? [S/N]");
+
+        let leasing = prompt(`${this.nome} Seu saldo não é suficiente para efetuar essa transação. Você quer usar o cheque especial? [S/N]`);
         if(leasing === "S" || leasing === "s") {
-            console.log("Cliente respondeu SIM");
+            console.log("Cliente respondeu SIM e vai usar o CHEQUE ESPECIAL");
             return true;
         } else if (leasing === "N" || leasing === "n") {
             console.log("Cliente respondeu NÃO");
@@ -205,6 +244,8 @@ class Conta {
             console.log("Cliente respondeu ERRADO");
             this.leasing();
         }
+
+        return leasing;
     }
 }
 
@@ -264,7 +305,7 @@ class pJ extends Cliente {
     }
 
 }
-
+/** 
 const conta1 = new pF("Marlon", "11 951363201", "Avenida Perimetral, 598", "São Luiz Gonzaga", "Passo Fundo", "000.000.000-00", "12345678910");
 console.log(conta1);
 
@@ -312,6 +353,39 @@ conta1.pagar(200, 5);
 console.log(conta1.saldo);
 
 conta1.leasing();
+
+*/
+const conta1 = new pF("CONTA1", "11 951363201", "Avenida Perimetral, 598", "São Luiz Gonzaga", "Passo Fundo", "000.000.000-00", "12345678910");
+console.log(conta1);
+
+const conta2 = new pF("CONTA2", "11 984458554", "Avenida Bsandeirantes, 158", "Centro", "São Paulo", "00045580000", "12765438910");
+console.log(conta1);
+
+conta1.depositar(1000);
+console.log(conta1.saldo);
+conta2.depositar(100);
+console.log(conta2.saldo);
+
+conta1.sacar(200);
+console.log(conta1.saldo);
+conta2.sacar(200);
+console.log(conta2.saldo);
+
+console.log("FIM DOS TESTES DO SACAR")
+
+console.log("Antes do Transferir")
+console.log(conta1.saldo);
+console.log(conta2.saldo)
+
+conta1.transferir(1500, conta2);
+console.log("Depois do Transferir");
+console.log(conta1.saldo);
+console.log(conta2.saldo);
+
+
+
+
+
 
 
 
